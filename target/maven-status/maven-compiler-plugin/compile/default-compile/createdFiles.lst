@@ -1,0 +1,7 @@
+com\example\passwordmanager\service\PasswordService.class
+com\example\passwordmanager\config\SecurityConfig.class
+com\example\passwordmanager\model\PasswordEntry.class
+com\example\passwordmanager\repository\PasswordRepository.class
+com\example\App.class
+com\example\passwordmanager\controller\PasswordController.class
+com\example\passwordmanager\PasswordManagerApplication.class
