@@ -37,25 +37,116 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => t.remove(), 2800);
     };
 
-    // simple profile chart (if canvas exists)
+    // copy-to-clipboard handler (delegated)
+    document.addEventListener('click', (ev) => {
+        const btn = ev.target.closest && ev.target.closest('.copy-btn');
+        if (!btn) return;
+        const id = btn.getAttribute('data-id');
+        if (!id) {
+            showToast('No id');
+            return;
+        }
+        fetch(`/api/password/${id}`)
+            .then(r => r.json())
+            .then(data => {
+                if (data && data.password) {
+                    navigator.clipboard.writeText(data.password).then(() => {
+                        showToast('Password copied to clipboard');
+                    }).catch(() => showToast('Clipboard write failed'));
+                } else {
+                    showToast('Unable to retrieve password');
+                }
+            }).catch(() => showToast('Network error'));
+    });
+
+    // simple edit handler triggered by Edit buttons
+    window.openEdit = async (el) => {
+        const id = el.getAttribute('data-id');
+        if (!id) return showToast('No id');
+        try {
+            const r = await fetch(`/api/entry/${id}`);
+            if (!r.ok) return showToast('Entry not found');
+            const entry = await r.json();
+            const website = prompt('Website', entry.website || '');
+            if (website === null) return;
+            const username = prompt('Username', entry.username || '') || '';
+            const password = prompt('Password (will replace)', '') || '';
+            const category = prompt('Category', entry.category || '') || '';
+
+            const form = new URLSearchParams();
+            form.set('website', website);
+            form.set('username', username);
+            form.set('password', password);
+            form.set('category', category);
+
+            const u = await fetch(`/api/entry/${id}`, { method: 'POST', body: form });
+            if (u.ok) {
+                showToast('Updated');
+                setTimeout(() => location.reload(), 600);
+            } else {
+                showToast('Update failed');
+            }
+        } catch (e) {
+            console.warn(e);
+            showToast('Error');
+        }
+    };
+
+    // dynamic profile chart: fetch /api/stats and poll for updates (robust)
     if (document.getElementById('profileChart')) {
         try {
             const ctx = document.getElementById('profileChart').getContext('2d');
-            // Chart.js must be included in the page; this code expects it
-            new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Social', 'Work', 'Finance', 'Other'],
-                    datasets: [{
-                        data: [8, 4, 3, 2], backgroundColor: [
-                            'rgba(11,99,211,0.9)', 'rgba(255,159,67,0.92)', 'rgba(25,169,116,0.9)', 'rgba(155,155,155,0.12)'
-                        ]
-                    }]
-                },
-                options: { plugins: { legend: { position: 'bottom' } }, cutout: '60%' }
-            });
+            let chart = null;
+
+            async function fetchStatsAndUpdate() {
+                try {
+                    const res = await fetch('/api/stats', { cache: 'no-store' });
+                    if (!res.ok) return;
+                    const json = await res.json();
+
+                    // derive labels (exclude Total)
+                    const labels = Object.keys(json).filter(k => k !== 'Total');
+                    const data = labels.map(l => json[l] || 0);
+
+                    if (!chart) {
+                        chart = new Chart(ctx, {
+                            type: 'doughnut',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    data: data,
+                                    backgroundColor: [
+                                        'rgba(11,99,211,0.9)', 'rgba(255,159,67,0.92)', 'rgba(25,169,116,0.9)', 'rgba(155,155,155,0.12)'
+                                    ].slice(0, labels.length)
+                                }]
+                            },
+                            options: { plugins: { legend: { position: 'bottom' } }, cutout: '60%' }
+                        });
+                    } else {
+                        // keep labels in-sync (in case categories change)
+                        chart.data.labels = labels;
+                        chart.data.datasets[0].data = data;
+                        chart.update();
+                    }
+
+                    // update count widgets if present
+                    const entryEls = document.querySelectorAll('.entry-count');
+                    const catEls = document.querySelectorAll('.category-count');
+                    if (json.Total !== undefined) entryEls.forEach(el => el.innerText = json.Total);
+                    // categories with count > 0
+                    const categoryCount = labels.filter(l => (json[l] || 0) > 0).length;
+                    catEls.forEach(el => el.innerText = categoryCount);
+
+                } catch (e) {
+                    console.warn('Failed to update stats', e);
+                }
+            }
+
+            // initial fetch + polling
+            fetchStatsAndUpdate();
+            setInterval(fetchStatsAndUpdate, 5000);
+
         } catch (e) {
-            // Chart missing - ignore
             console.warn(e);
         }
     }

@@ -1,8 +1,15 @@
 C:\DevProjects\password-manager\src\main\java\com\example\App.java
+C:\DevProjects\password-manager\src\main\java\com\example\passwordmanager\config\EncryptionConfig.java
 C:\DevProjects\password-manager\src\main\java\com\example\passwordmanager\config\SecurityConfig.java
+C:\DevProjects\password-manager\src\main\java\com\example\passwordmanager\controller\AuthController.java
+C:\DevProjects\password-manager\src\main\java\com\example\passwordmanager\controller\GlobalControllerAdvice.java
 C:\DevProjects\password-manager\src\main\java\com\example\passwordmanager\controller\PageController.java
 C:\DevProjects\password-manager\src\main\java\com\example\passwordmanager\controller\PasswordController.java
 C:\DevProjects\password-manager\src\main\java\com\example\passwordmanager\model\PasswordEntry.java
+C:\DevProjects\password-manager\src\main\java\com\example\passwordmanager\model\User.java
 C:\DevProjects\password-manager\src\main\java\com\example\passwordmanager\PasswordManagerApplication.java
 C:\DevProjects\password-manager\src\main\java\com\example\passwordmanager\repository\PasswordRepository.java
+C:\DevProjects\password-manager\src\main\java\com\example\passwordmanager\repository\UserRepository.java
+C:\DevProjects\password-manager\src\main\java\com\example\passwordmanager\service\CustomUserDetailsService.java
+C:\DevProjects\password-manager\src\main\java\com\example\passwordmanager\service\EncryptionService.java
 C:\DevProjects\password-manager\src\main\java\com\example\passwordmanager\service\PasswordService.java

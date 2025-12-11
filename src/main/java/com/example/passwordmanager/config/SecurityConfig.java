@@ -1,44 +1,53 @@
 package com.example.passwordmanager.config;
 
+import com.example.passwordmanager.service.CustomUserDetailsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
-    /**
-     * Development-friendly security config:
-     * - Permits access to the app pages, static resources and H2 console
-     * - Disables CSRF only for the H2 console and for GET/POST used in dev
-     * - Allows frames (needed by H2 console)
-     *
-     * IMPORTANT: This is for local dev only. For production, add real auth & enable
-     * CSRF.
-     */
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                // Allow H2 console frames and disable CSRF for H2 console endpoints
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/h2-console/**", "/actuator/**"))
-                .authorizeHttpRequests(auth -> auth
-                        // public pages and static assets
-                        .requestMatchers(
-                                "/", "/app", "/profile", "/about",
-                                "/css/**", "/js/**", "/images/**",
-                                "/favicon.ico", "/h2-console/**", "/error")
-                        .permitAll()
-                        // allow anything else in dev
-                        .anyRequest().permitAll())
-                // disable login form and HTTP basic for now (we permitAll already)
-                .httpBasic(httpBasic -> httpBasic.disable())
-                .formLogin(form -> form.disable());
+        @Autowired
+        private CustomUserDetailsService customUserDetailsService;
 
-        // allow frames (so H2 console works in browser)
-        http.headers().frameOptions().disable();
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
 
-        return http.build();
-    }
+        @Bean
+        public DaoAuthenticationProvider authenticationProvider() {
+                DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+                provider.setUserDetailsService(customUserDetailsService);
+                provider.setPasswordEncoder(passwordEncoder());
+                return provider;
+        }
+
+        @Bean
+        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+                http
+                                .authenticationProvider(authenticationProvider())
+                                .authorizeHttpRequests(authz -> authz
+                                                .requestMatchers("/", "/login", "/signup", "/about", "/static/**",
+                                                                "/css/**", "/js/**", "/images/**")
+                                                .permitAll()
+                                                .anyRequest().authenticated())
+                                .formLogin(form -> form
+                                                .loginPage("/login")
+                                                .defaultSuccessUrl("/app", true)
+                                                .permitAll())
+                                .logout(logout -> logout
+                                                .logoutUrl("/logout")
+                                                .logoutSuccessUrl("/")
+                                                .permitAll());
+                return http.build();
+        }
 }

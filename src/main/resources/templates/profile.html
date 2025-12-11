@@ -22,8 +22,9 @@
             <div class="profile-head">
                 <img class="avatar" th:src="@{/images/avatar.png}" src="/images/avatar.png" alt="Avatar">
                 <div style="flex:1">
-                    <h2 style="margin:0">Dylan</h2>
-                    <p style="margin:6px 0 0;color:var(--muted)">Member since <strong>2024</strong> • From army family
+                    <h2 style="margin:0">Hi, <span th:text="${username}">User</span></h2>
+                    <p style="margin:6px 0 0;color:var(--muted)">Member since <strong
+                            th:text="${memberSince}">2024</strong>
                     </p>
                 </div>
             </div>
@@ -34,6 +35,8 @@
                     <div class="card">
                         <p style="margin:0 0 8px;color:var(--muted)">Change password, enable two-factor, sign out of
                             other devices</p>
+                        <div th:if="${error}" style="margin-bottom:8px;color:var(--danger);font-weight:600" th:text="${error}"></div>
+                        <div th:if="${success}" style="margin-bottom:8px;color:var(--success);font-weight:600" th:text="${success}"></div>
                         <form th:action="@{/profile/change-password}" method="post" style="display:grid;gap:8px">
                             <input class="input" name="oldPassword" placeholder="Current password" type="password">
                             <input class="input" name="newPassword" placeholder="New password" type="password">
@@ -49,6 +52,18 @@
                 <div style="width:320px">
                     <h4 style="margin-bottom:8px">Usage</h4>
                     <div class="card" style="padding:14px;">
+                        <div style="display:flex;gap:12px;align-items:center;margin-bottom:8px">
+                            <div style="flex:1">
+                                <div style="font-size:18px;font-weight:700" class="entry-count" th:text="${entryCount}">
+                                    0</div>
+                                <div style="color:var(--muted)">Total entries</div>
+                            </div>
+                            <div style="width:120px;text-align:center">
+                                <div style="font-size:18px;font-weight:700" class="category-count"
+                                    th:text="${categoryCount}">0</div>
+                                <div style="color:var(--muted)">Categories</div>
+                            </div>
+                        </div>
                         <canvas id="profileChart" width="300" height="200"></canvas>
                     </div>
                 </div>

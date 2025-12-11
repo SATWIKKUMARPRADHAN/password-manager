@@ -21,29 +21,21 @@
 
 
     <main class="container hero">
-        <section class="hero-card fade-up">
-            <h1>Secure passwords. Seamless access.</h1>
-            <p class="lead">Vaultly keeps your passwords organised and protected. Lightweight, open, and simple — with
-                powerful features for productive users.</p>
+        <section class="hero-card fade-up hero-landing">
+            <div class="hero-inner">
+                <h1 class="hero-title">Vaultly — Secure passwords, effortless access</h1>
+                <p class="lead">Store all your credentials safely with Vaultly. Sign in to manage, copy, edit and export
+                    your passwords.</p>
 
-            <div class="hero-cta">
-                <a class="btn primary" th:href="@{/app}">Open App</a>
-                <a class="btn ghost" th:href="@{/about}">Learn more</a>
+                <div class="hero-cta">
+                    <a class="btn primary" th:href="@{/login}">Sign in</a>
+                    <a class="btn ghost" th:href="@{/signup}">Create account</a>
+                </div>
             </div>
-
-            <div class="features">
-                <div class="feature">
-                    <h4>End-to-end security</h4>
-                    <p>Passwords are stored safely and only revealed with your permission.</p>
-                </div>
-                <div class="feature">
-                    <h4>Fast search & organize</h4>
-                    <p>Quickly find the entry you need using categories and filters.</p>
-                </div>
-                <div class="feature">
-                    <h4>Beautiful UI</h4>
-                    <p>Polished layout with theme toggle, animations, and responsive design.</p>
-                </div>
+            <div class="hero-visual" aria-hidden="true">
+                <div class="blob b1"></div>
+                <div class="blob b2"></div>
+                <div class="blob b3"></div>
             </div>
         </section>
     </main>

@@ -11,15 +11,18 @@
             <button id="navToggle" class="btn small" aria-label="Open menu">☰</button>
 
             <ul class="nav-links">
-                <li><a th:href="@{/}">Home</a></li>
-                <li><a th:href="@{/app}">App</a></li>
+                <li th:if="${!authenticated}"><a th:href="@{/}">Home</a></li>
+                <li th:if="${authenticated}"><a th:href="@{/app}">App</a></li>
+                <li th:if="${authenticated}"><a th:href="@{/profile}">Profile</a></li>
                 <li><a th:href="@{/about}">About</a></li>
-                <li><a th:href="@{/profile}">Profile</a></li>
             </ul>
 
             <div class="nav-actions">
                 <button id="themeToggle" class="btn small" title="Toggle theme">🌙</button>
-                <a class="btn primary" th:href="@{/app}">Open App</a>
+                <a class="btn primary" th:if="${authenticated}" th:href="@{/app}">Open App</a>
+                <a class="btn" th:if="${authenticated}" th:href="@{/logout}">Logout</a>
+                <a class="btn ghost" th:if="${!authenticated}" th:href="@{/login}">Sign in</a>
+                <a class="btn primary" th:if="${!authenticated}" th:href="@{/signup}">Create account</a>
             </div>
         </div>
     </div>

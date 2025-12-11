@@ -34,6 +34,42 @@ body.dark {
     --glass: rgba(255, 255, 255, 0.02);
 }
 
+/* Dark-mode specific tweaks for components that use explicit rgba whites in light theme */
+body.dark .site-header {
+    background: linear-gradient(180deg, rgba(10,12,16,0.28), rgba(8,10,14,0.24));
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+body.dark .btn.ghost {
+    border: 1px solid rgba(255,255,255,0.06);
+    color: var(--text);
+}
+
+body.dark .input {
+    border: 1px solid rgba(255,255,255,0.04);
+    background: rgba(255,255,255,0.02);
+}
+
+body.dark .input:focus {
+    box-shadow: 0 8px 28px rgba(11,99,211,0.12);
+}
+
+/* improve card shadows for dark */
+body.dark .card {
+    box-shadow: 0 10px 30px rgba(2,4,8,0.6);
+}
+
+/* entry background tweak in dark */
+body.dark .entry {
+    background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border: 1px solid rgba(255,255,255,0.03);
+}
+
+/* placeholder fallback for older browsers */
+::-webkit-input-placeholder { color: var(--muted); opacity: 0.9 }
+:-ms-input-placeholder { color: var(--muted); opacity: 0.9 }
+:-moz-placeholder { color: var(--muted); opacity: 0.9 }
+
 /* ---------- Global ---------- */
 * {
     box-sizing: border-box
@@ -127,6 +163,17 @@ body {
     align-items: center;
 }
 
+/* hide mobile toggle on desktop, show on smaller screens */
+#navToggle {
+    display: none;
+    background: transparent;
+    border-radius: 8px;
+}
+
+.nav-links.open {
+    display: flex !important;
+}
+
 /* buttons */
 .btn {
     display: inline-flex;
@@ -180,6 +227,92 @@ body {
     margin: 20px auto 36px;
     position: relative;
     overflow: hidden;
+}
+
+/* Landing-specific visuals */
+.hero-landing {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    align-items: center;
+    gap: 20px;
+    min-height: 360px;
+}
+
+.hero-landing .hero-inner {
+    z-index: 2
+}
+
+.hero-title {
+    font-size: 34px;
+    margin: 0 0 12px
+}
+
+.hero-visual {
+    position: absolute;
+    right: 24px;
+    top: 16px;
+    bottom: 16px;
+    width: 420px;
+    z-index: 1;
+    pointer-events: none
+}
+
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(36px);
+    opacity: 0.9
+}
+
+.blob.b1 {
+    width: 220px;
+    height: 220px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    right: 20px;
+    top: 40px;
+    animation: float 8s ease-in-out infinite
+}
+
+.blob.b2 {
+    width: 160px;
+    height: 160px;
+    background: linear-gradient(90deg, var(--accent), var(--success));
+    right: 80px;
+    top: 120px;
+    animation: float 6s ease-in-out infinite reverse
+}
+
+.blob.b3 {
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(90deg, var(--primary-2), #9b6cff);
+    right: 160px;
+    top: 10px;
+    animation: float 9s linear infinite
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0)
+    }
+
+    50% {
+        transform: translateY(-18px)
+    }
+
+    100% {
+        transform: translateY(0)
+    }
+}
+
+/* make landing CTA stand out */
+.hero-landing .hero-cta .btn {
+    padding: 12px 18px
+}
+
+.hero-landing .lead {
+    color: var(--muted);
+    max-width: 480px
 }
 
 .hero h1 {
@@ -267,6 +400,18 @@ body {
 .input:focus {
     box-shadow: 0 8px 28px rgba(11, 99, 211, 0.08);
     transform: translateY(-2px)
+}
+
+/* placeholder color for inputs */
+.input::placeholder {
+    color: var(--muted);
+    opacity: 0.9;
+}
+
+/* ensure selects and textareas match inputs visually */
+.input[type=text], .input[type=password], textarea, select {
+    color: var(--text);
+    background: transparent;
 }
 
 .form-actions {
@@ -411,6 +556,29 @@ body {
 
     .nav-links {
         display: none
+    }
+
+    #navToggle {
+        display: inline-flex;
+    }
+
+    .nav-links.open {
+        position: absolute;
+        top: 64px;
+        left: 12px;
+        right: 12px;
+        flex-direction: column;
+        gap: 8px;
+        background: var(--card);
+        padding: 12px;
+        border-radius: 12px;
+        box-shadow: var(--shadow-soft);
+        display: flex;
+    }
+
+    .nav-links a {
+        display: block;
+        padding: 10px 12px;
     }
 
     .container {
