@@ -4,6 +4,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <title>Vaultly — Profile</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -35,8 +37,10 @@
                     <div class="card">
                         <p style="margin:0 0 8px;color:var(--muted)">Change password, enable two-factor, sign out of
                             other devices</p>
-                        <div th:if="${error}" style="margin-bottom:8px;color:var(--danger);font-weight:600" th:text="${error}"></div>
-                        <div th:if="${success}" style="margin-bottom:8px;color:var(--success);font-weight:600" th:text="${success}"></div>
+                        <div th:if="${error}" style="margin-bottom:8px;color:var(--danger);font-weight:600"
+                            th:text="${error}"></div>
+                        <div th:if="${success}" style="margin-bottom:8px;color:var(--success);font-weight:600"
+                            th:text="${success}"></div>
                         <form th:action="@{/profile/change-password}" method="post" style="display:grid;gap:8px">
                             <input class="input" name="oldPassword" placeholder="Current password" type="password">
                             <input class="input" name="newPassword" placeholder="New password" type="password">

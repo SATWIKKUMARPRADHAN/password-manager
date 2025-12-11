@@ -4,6 +4,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <title>Vaultly — App</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/style.css}" href="/css/style.css">
@@ -68,42 +70,42 @@
                 </div>
 
 
-                                <!-- In your template iterate entries:
+                <!-- In your template iterate entries:
                         <div th:each="e : ${entries}" class="entry"> ... </div>
                     -->
-                        </section>
+            </section>
 
-                        <!-- Right: profile / stats box -->
-                        <aside class="card fade-up" style="height:100%;">
-            <div class="profile-head">
-                <img class="avatar" th:src="@{/images/avatar.png}" src="/images/avatar.png" alt="avatar">
-                <div style="flex:1">
-                    <h3 style="margin:0">Hi, <span th:text="${username}">Dylan</span></h3>
-                    <p style="margin:6px 0 0;color:var(--muted)">Secure and fast. Total entries: <strong
-                            th:text="${count}">12</strong></p>
-                </div>
-            </div>
-
-            <div style="margin-top:18px" class="stats">
-                <div class="stat">
-                    <div style="font-size:18px;font-weight:700" class="entry-count" th:text="${entryCount}">0</div>
-                    <div style="color:var(--muted)">Total entries</div>
-                </div>
-                <div class="stat">
-                    <div style="font-size:18px;font-weight:700" class="category-count" th:text="${categoryCount}">0
+            <!-- Right: profile / stats box -->
+            <aside class="card fade-up" style="height:100%;">
+                <div class="profile-head">
+                    <img class="avatar" th:src="@{/images/avatar.png}" src="/images/avatar.png" alt="avatar">
+                    <div style="flex:1">
+                        <h3 style="margin:0">Hi, <span th:text="${username}">Dylan</span></h3>
+                        <p style="margin:6px 0 0;color:var(--muted)">Secure and fast. Total entries: <strong
+                                th:text="${count}">12</strong></p>
                     </div>
-                    <div style="color:var(--muted)">Categories</div>
                 </div>
-            </div>
 
-            <hr style="margin:16px 0;border:none;border-top:1px solid rgba(0,0,0,0.04)">
+                <div style="margin-top:18px" class="stats">
+                    <div class="stat">
+                        <div style="font-size:18px;font-weight:700" class="entry-count" th:text="${entryCount}">0</div>
+                        <div style="color:var(--muted)">Total entries</div>
+                    </div>
+                    <div class="stat">
+                        <div style="font-size:18px;font-weight:700" class="category-count" th:text="${categoryCount}">0
+                        </div>
+                        <div style="color:var(--muted)">Categories</div>
+                    </div>
+                </div>
 
-            <div>
-                <a class="btn" th:href="@{/export}"
-                    style="width:100%;margin-bottom:8px;display:inline-flex;justify-content:center">Export CSV</a>
-                <a class="btn ghost" th:href="@{/profile}"
-                    style="width:100%;display:inline-flex;justify-content:center">Account settings</a>
-            </div>
+                <hr style="margin:16px 0;border:none;border-top:1px solid rgba(0,0,0,0.04)">
+
+                <div>
+                    <a class="btn" th:href="@{/export}"
+                        style="width:100%;margin-bottom:8px;display:inline-flex;justify-content:center">Export CSV</a>
+                    <a class="btn ghost" th:href="@{/profile}"
+                        style="width:100%;display:inline-flex;justify-content:center">Account settings</a>
+                </div>
             </aside>
         </div>
     </main>

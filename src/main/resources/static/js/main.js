@@ -1,5 +1,17 @@
 // main.js - theme toggle, simple toast, mobile nav, sample chart
 
+// Get CSRF token from meta tag (Spring Security)
+function getCsrfToken() {
+    const token = document.querySelector('meta[name="_csrf"]');
+    return token ? token.getAttribute('content') : '';
+}
+
+// Get CSRF header name from meta tag (Spring Security)
+function getCsrfHeaderName() {
+    const header = document.querySelector('meta[name="_csrf_header"]');
+    return header ? header.getAttribute('content') : 'X-CSRF-TOKEN';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // theme toggle
     const themeToggle = document.getElementById('themeToggle');
@@ -69,8 +81,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const entry = await r.json();
             const website = prompt('Website', entry.website || '');
             if (website === null) return;
+            if (!website.trim()) return showToast('Website is required');
             const username = prompt('Username', entry.username || '') || '';
-            const password = prompt('Password (will replace)', '') || '';
+            const password = prompt('Password (leave blank to keep current)', '') || '';
             const category = prompt('Category', entry.category || '') || '';
 
             const form = new URLSearchParams();
@@ -79,17 +92,41 @@ document.addEventListener('DOMContentLoaded', () => {
             form.set('password', password);
             form.set('category', category);
 
-            const u = await fetch(`/api/entry/${id}`, { method: 'POST', body: form });
+            const u = await fetch(`/api/entry/${id}`, {
+                method: 'POST',
+                body: form,
+                headers: {
+                    [getCsrfHeaderName()]: getCsrfToken()
+                }
+            });
             if (u.ok) {
-                showToast('Updated');
+                showToast('Password updated successfully');
                 setTimeout(() => location.reload(), 600);
             } else {
                 showToast('Update failed');
             }
         } catch (e) {
             console.warn(e);
-            showToast('Error');
+            showToast('Error updating entry');
         }
+    };
+
+    // logout handler
+    window.logout = (ev) => {
+        ev.preventDefault();
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/logout';
+
+        // Add CSRF token
+        const csrfToken = document.createElement('input');
+        csrfToken.type = 'hidden';
+        csrfToken.name = '_csrf';
+        csrfToken.value = getCsrfToken();
+        form.appendChild(csrfToken);
+
+        document.body.appendChild(form);
+        form.submit();
     };
 
     // dynamic profile chart: fetch /api/stats and poll for updates (robust)
