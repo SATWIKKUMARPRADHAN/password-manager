@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Sign up - Vaultly</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 80vh
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card" style="width:420px;padding:28px;">
+        <h2 style="margin-top:0">Create an account</h2>
+        <form th:action="@{/signup}" method="post" style="display:grid;gap:10px;margin-top:12px">
+            <input class="input" name="username" placeholder="Username" required>
+            <input class="input" name="password" placeholder="Password" type="password" required>
+            <div style="display:flex;gap:8px">
+                <button class="btn primary" type="submit">Create</button>
+                <a class="btn ghost" th:href="@{/login}">Sign in</a>
+            </div>
+            <p th:if="${error}" style="color:var(--danger);margin:6px 0 0" th:text="${error}"></p>
+        </form>
+    </div>
+</body>
+
+</html>

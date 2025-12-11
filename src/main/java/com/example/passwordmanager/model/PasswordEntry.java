@@ -1,6 +1,8 @@
 package com.example.passwordmanager.model;
 
 import jakarta.persistence.*;
+import java.time.Instant;
+import com.example.passwordmanager.model.User;
 
 @Entity
 public class PasswordEntry {
@@ -12,6 +14,12 @@ public class PasswordEntry {
     private String website;
     private String username;
     private String password; // stored hashed
+    private String category;
+
+    private Instant createdAt = Instant.now();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User owner;
 
     public PasswordEntry() {
     }
@@ -20,6 +28,30 @@ public class PasswordEntry {
         this.website = website;
         this.username = username;
         this.password = password;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     public Long getId() {
